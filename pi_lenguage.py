@@ -1,4 +1,9 @@
+def silabear(palabra:str) -> list:
+    pass
+
+
 def normal_a_pi(palabra: str) -> str:
+
     
     pass
 
