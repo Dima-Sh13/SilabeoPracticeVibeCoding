@@ -12,40 +12,42 @@ consonantesDobles = ["bl", "cl", "fl", "gl", "kl", "pl", "tl",
                 "ch", "ll", "rr"]
 
 def silabear(palabra:str) -> list:
-    word = list(palabra)
-    silabas = []
-    posVoc = {}
+    listaPalabra = list(palabra)
+    posicionVocal = {}
     contador = 0
-    while any(x is not None for x in word):
-        for i in word:
-            if i  in vocales_abiertas or i in vocales_cerradas:
-                pos= word.index(i)
-                
-                
-                if word[pos-1]:
-                    nl = word[pos -1]
-                    silabas.append(nl + i)
-                    posVoc[pos] = nl + i
-                    word[pos] = None
-                    word[pos-1] = None 
+    
+    while any(x is not None for x in listaPalabra):
+                   
+        for letra in listaPalabra:
                     
+            if letra  in vocales_abiertas or letra in vocales_cerradas:
+                pos= listaPalabra.index(letra)
+                if listaPalabra[pos-1]:
+                    nl = listaPalabra[pos -1]
+                    posicionVocal[pos] = nl + letra
+                    listaPalabra[pos] = None
+                    listaPalabra[pos-1] = None 
+                
                 else:
-                   silabas.append(i)
-            if contador >= 1 and i in consonantes:
-                consPos= word.index(i)
-                posVoc[consPos-1] = posVoc[consPos-1] + i
-                word[consPos] = None
+                    nl = listaPalabra[pos + 1] 
+                    posicionVocal[pos] = letra
+
+            if contador >= 1 and letra in consonantes:
+                posicionVocal[listaPalabra.index(letra)-1] = posicionVocal[listaPalabra.index(letra)-1] + letra
+                listaPalabra[listaPalabra.index(letra)] = None
+                
 
         contador += 1    
-
-    silabas = [x for i,x in posVoc.items()]
-
-        
+    silabas = [x for i,x in posicionVocal.items()]
                 
     return silabas               
 
+ 
+print(silabear("cotarte"))       
                 
-print(silabear("cotarte"))                   
+
+                
+                
 
    
     
