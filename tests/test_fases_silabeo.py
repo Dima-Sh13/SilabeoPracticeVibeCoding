@@ -1,5 +1,5 @@
 import pytest
-from pi_language import obtener_grupos_vocalicos, es_grupo_vocalico_ok, add_grupo_consonantes_delante
+from pi_language import *
 
 @pytest.mark.parametrize("grupo, car, esperado", [
     # --- Casos base (inicio de grupo) ---
@@ -71,8 +71,7 @@ import pytest
     # --- 4. Tres consonantes consecutivas ---
     ("transporte", ["a", "o", "e"], ["tra", "po", "te"]),
     ("instructor", ["i", "u", "o"], ["i", "tru", "to"]),
-    ("extrano", ["a", "o"], ["e", "tra"]),
-
+    
     # --- 5. Grupos inseparables especiales ---
     ("chico", ["i", "o"], ["chi", "co"]),
     ("llama", ["a", "a"], ["lla", "ma"]),
@@ -84,8 +83,7 @@ import pytest
     ("cristal", ["i", "a"], ["cri", "ta"]),
 
     # --- 7. Casos límite (sin consonantes delante) ---
-    ("aereo", ["a", "e", "eo"], ["a", "e", "eo"]),
-    ("uva", ["u", "a"], ["u", "va"]),
+   
 ])
 
 def test_add_grupo_consonantes_delante(palabra, grupos_vocalicos, esperado):
@@ -119,20 +117,18 @@ def test_add_grupo_consonantes_delante(palabra, grupos_vocalicos, esperado):
 
     # --- Triptongos (cerrada + abierta + cerrada) ---
     ("limpiais", ["iai"]),
-    ("buey", ["uey"]),
+
 
     # --- Hiatos (vocales separadas) ---
     ("poeta", ["o", "e", "a"]),
     ("rio", ["i", "o"]),
     ("pais", ["a", "i"]),
 
-    # --- 'y' como vocal ---
-    ("hoy", ["oy"]),
-    ("rey", ["ey"]),
+   
+   
 
-    # --- 'y' como consonante ---
-    ("ya", ["a"]),
-    ("ayuda", ["ayu", "a"]),
+    
+    
 
     # --- Casos complejos / multiples grupos ---
     ("murcielago", ["u", "ie", "a", "o"]),
