@@ -1,5 +1,5 @@
 import pytest
-from pi_lenguage import normal_a_pi, pi_a_normal
+from pi_language import normal_a_pi, pi_a_normal
 
 def test_normal_a_pi_basicos():
     assert normal_a_pi("hola") == "pihopila"

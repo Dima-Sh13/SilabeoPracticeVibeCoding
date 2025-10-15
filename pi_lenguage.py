@@ -43,7 +43,7 @@ def silabear(palabra:str) -> list:
     return silabas               
 
  
-print(silabear("cotarte"))       
+ 
                 
 
                 
