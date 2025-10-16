@@ -1,45 +1,66 @@
-# Reto: Lenguaje Pi y Silabeador en Python
+# Proyecto: Traductor al "idioma pi"
 
-## Descripción
+Descripción
+-----------
 
-En este reto programarás un **silabeador** para trabajar con el "lenguaje pi", el clásico juego infantil donde se intercalaba la sílaba "pi" delante de cada sílaba de una palabra o frase. Además, deberás implementar un traductor inverso que recupere el texto original.
+Este proyecto implementa un algoritmo para traducir palabras del castellano al llamado "idioma pi" —el juego infantil en el que se añade la sílaba "pi" delante de cada sílaba de una palabra— y utilidades para dividir palabras en protosílabas.
 
 ## Objetivos
 
-- Crear una clase `Silabeador` que separe correctamente las palabras en sílabas según reglas del castellano.
-- Implementar un método que inserte la sílaba *pi* delante de cada sílaba (modo juego infantil).
-- Implementar el método inverso para traducir frases desde el lenguaje pi al español normal.
 
 ## Reglas y Especificaciones
 
-- **Separación en sílabas**: 
   - Buscar grupos de vocales.
   - Asignar a la vocal la consonante de su izquierda si existe.
   - Las letras que sobran se agrupan con la sílaba anterior.
-- Considerar grupos especiales, diptongos, triptongos, pares de consonantes, y que la letra **y** puede ser vocal o consonante según contexto.
-- Prestar atención a casos con el prefijo “in-” (por ejemplo, "inacción" debe ser "in-ac-ción", no "i-nac-ción").
-- Ejemplo de funcionamiento:
   - Español: `Hola, me llamo Ramón`
   - Lenguaje pi: `pihopila, pime pillapimo pirrapimn`
+Qué hace
+---------
 
-## Ejemplo de uso esperado
+- Separa una palabra en grupos vocálicos y consonánticos según reglas sencillas de silabeo en castellano.
+- Construye las protosílabas (consonantes + grupo vocálico) y las completa para obtener la partición en sílabas.
+- Traduce una palabra normal al "idioma pi" prefijando "pi" a cada sílaba.
+
+Archivo principal
+-----------------
+
+El código principal está en `pi_language.py`. Funciones útiles:
+
+- `silabear(palabra)` — devuelve una lista con las protosílabas/sílabas de la palabra.
+- `normal_a_pi(palabra)` — devuelve la palabra transformada al idioma pi (prefijo "pi" en cada sílaba).
+Ejemplo rápido
+--------------
+
+En Python puedes usar las funciones del módulo así:
 
 ```python
-entrada = "Hola, me llamo Ramón"
-salida = Silabeador().a_pi(entrada)
-print(salida)
-# pihopila, pime pillapimo pirrapimn
+from pi_language import normal_a_pi, silabear
 
-print(Silabeador().de_pi(salida))
-# Hola, me llamo Ramón
+print(silabear("hola"))         # ejemplo de salida: ['ho', 'la']
+print(normal_a_pi("hola"))      # -> 'pihola' (dependiendo de la implementación exacta)
 ```
 
-## Extras
+Nota: hay un esbozo de función inversa (`pi_a_normal`) en el repositorio pero no está implementada completamente.
 
-- Añade más ejemplos de palabras con grupos consonánticos y diptongos.
-- Incluye pruebas automatizadas que validen ambos métodos.
-- Documenta limitaciones y situaciones especiales que observes.
+Limitaciones y supuestos
+------------------------
 
-## Recursos  
+- El algoritmo asume entradas en minúsculas y caracteres alfabéticos simples; puede no manejar correctamente puntuación, mayúsculas o caracteres no latinos sin limpiarlos antes.
+- Algunas funciones asumen longitudes mínimas al indexar cadenas (por ejemplo para comprobar diptongos/triptongos). Si quieres, puedo añadir validaciones adicionales.
 
-Consulta el archivo original adjunto para detalles sobre las **reglas de silabeo**, grupos de letras, casos especiales y ejemplos.
+Cómo contribuir
+----------------
+
+- Añade/ajusta reglas de silabeo si detectas casos que no se tratan correctamente (diptongos especiales, hiatos, etc.).
+- Implementa la función inversa completa `pi_a_normal` y añade tests en la carpeta `tests/`.
+- Mejora la normalización de entrada (gestión de mayúsculas, acentos y signos de puntuación).
+
+Ejemplo de tests sugeridos
+-------------------------
+
+- Palabras simples: `hola`, `casa`.
+- Palabras con diptongo/triptongo: `huevo`, `Uruguay`.
+- Grupos consonánticos: `pluma`, `brisa`.
+
+Si quieres, puedo generar un README más detallado con instrucciones para ejecutar los tests y ejemplos adicionales.
