@@ -95,18 +95,38 @@ def completar(grupos_protosilabicos, palabra):
 
 
 def silabear(palabra):
-    memoria = ""    
-    resultado = []
-    for caracter in palabra:
-        if caracter in VOCALES_ABIERTAS or caracter in VOCALES_CERRADAS:
-            resultado.append(memoria + caracter)
-        memoria = caracter
+    grupos_vocalicos = obtener_grupos_vocalicos(palabra)
+    grupos_protosilabicos = add_grupo_consonantes_delante(grupos_vocalicos, palabra)
+    completar(grupos_protosilabicos, palabra)
+    return grupos_protosilabicos
+
+
+
+
+
 
 def normal_a_pi(palabra):
-    pass
+    silabas = silabear(palabra)
+    piSilabas = []
+    
+    for silaba in silabas:
+        piSilabas.append("pi" + silaba)
+    pipalabra = "".join(piSilabas)
+    return pipalabra     
+
+    
 
 def pi_a_normal(palabra):
-    pass
+    silabasNormal= []    
+    for i in silabear(palabra):
+        if i != "pi":
+            silabasNormal.append(i)
+    palabraNormal = "".join(silabasNormal)        
+
+
+   
+
+    return palabraNormal
 
 if __name__ == "__main__":
-    print(completar(["tra", "po", "te"], "transportes"))
+    print(pi_a_normal("pihopila"))
