@@ -81,3 +81,18 @@ def normal_a_pi(palabra):
 
 def pi_a_normal(palabra):
     pass
+
+
+
+
+
+def completar (palabra, grupo):
+    letras = palabra
+    sobrantes = 
+    for i in grupo:
+        if i in palabra:
+            letras.replace()
+    return letras
+
+
+print(completar("transporte", ("tra","po","te")))
