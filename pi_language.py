@@ -115,18 +115,20 @@ def normal_a_pi(palabra):
     return pipalabra     
 
     
-
+"""
 def pi_a_normal(palabra):
-    silabasNormal= []    
-    for i in silabear(palabra):
-        if i != "pi":
-            silabasNormal.append(i)
+    silabasNormal= []
+    ix_pi = 0
+    silaba_anterior =    
+    for i in silabear(palabra)[1]:
+        
     palabraNormal = "".join(silabasNormal)        
 
 
    
 
     return palabraNormal
-
+"""
+    
 if __name__ == "__main__":
     print(pi_a_normal("pihopila"))
