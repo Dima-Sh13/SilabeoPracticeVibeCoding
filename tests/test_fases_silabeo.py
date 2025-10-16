@@ -1,5 +1,9 @@
 import pytest
+<<<<<<< HEAD
 from pi_language import *
+=======
+from pi_language import obtener_grupos_vocalicos, es_grupo_vocalico_ok, add_grupo_consonantes_delante
+>>>>>>> 19dad3e5b4d33fcf11806a24bd4fce74aa83aaf5
 
 @pytest.mark.parametrize("grupo, car, esperado", [
     # --- Casos base (inicio de grupo) ---
@@ -71,7 +75,12 @@ import pytest
     # --- 4. Tres consonantes consecutivas ---
     ("transporte", ["a", "o", "e"], ["tra", "po", "te"]),
     ("instructor", ["i", "u", "o"], ["i", "tru", "to"]),
+<<<<<<< HEAD
     
+=======
+    ("extrano", ["e", "a", "o"], ["e", "tra", "no"]),
+
+>>>>>>> 19dad3e5b4d33fcf11806a24bd4fce74aa83aaf5
     # --- 5. Grupos inseparables especiales ---
     ("chico", ["i", "o"], ["chi", "co"]),
     ("llama", ["a", "a"], ["lla", "ma"]),
@@ -83,7 +92,12 @@ import pytest
     ("cristal", ["i", "a"], ["cri", "ta"]),
 
     # --- 7. Casos límite (sin consonantes delante) ---
+<<<<<<< HEAD
    
+=======
+    ("aereo", ["a", "e", "eo"], ["a", "e", "reo"]),
+    ("uva", ["u", "a"], ["u", "va"]),
+>>>>>>> 19dad3e5b4d33fcf11806a24bd4fce74aa83aaf5
 ])
 
 def test_add_grupo_consonantes_delante(palabra, grupos_vocalicos, esperado):
@@ -116,6 +130,7 @@ def test_add_grupo_consonantes_delante(palabra, grupos_vocalicos, esperado):
     ("viuda", ["iu", "a"]),
 
     # --- Triptongos (cerrada + abierta + cerrada) ---
+<<<<<<< HEAD
     ("limpiais", ["iai"]),
 
 
@@ -129,6 +144,15 @@ def test_add_grupo_consonantes_delante(palabra, grupos_vocalicos, esperado):
 
     
     
+=======
+    ("limpiais", ["i", "iai"]),
+
+    # --- Hiatos (vocales separadas) ---
+    ("poeta", ["o", "e", "a"]),
+    ("rio", ["io"]),
+    ("pais", ["ai"]),
+
+>>>>>>> 19dad3e5b4d33fcf11806a24bd4fce74aa83aaf5
 
     # --- Casos complejos / multiples grupos ---
     ("murcielago", ["u", "ie", "a", "o"]),
