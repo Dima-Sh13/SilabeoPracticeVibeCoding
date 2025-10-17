@@ -1,56 +1,37 @@
+from enum import Enum
+
 CONSONANTES = ("b", "c", "d", "f", "g", "h", "j", "k", "l", "ll", "m", "n", "ñ", "p", "q", "r", "s", "t", "v", "w", "x", "z")
 VOCALES_ABIERTAS = ("a", "e", "o")
 VOCALES_CERRADAS = ("i", "u")
 SEMIVOCALES = ("y",)
 PARES_CONSONANTES = ("bl", "cl", "fl", "gl", "kl", "pl", "tl", "br", "cr", "dr", "fr", "gr", "kr", "pr", "tr", "ch", "ll", "rr")
 
-def es_vocal(caracter: str) -> bool:
-    """
-    Devuelve True si `caracter` es una vocal (abierta o cerrada).
+class ES_PI(Enum):
+    NO_HAY_PI = 0
+    SOLO_P = 1
+    YA_HAY_PI = 2
 
-    Asume que `caracter` es una cadena (normalmente de longitud 1).
-    """
+class TipoCaracter(Enum):
+    LETRA = 1
+    ESPACIO = 2
+    OTRO = 3
+
+
+def es_vocal(caracter):
     return caracter in VOCALES_ABIERTAS or caracter in VOCALES_CERRADAS
 
-def es_diptongo(grupo: str) -> bool:
-    """
-    Determina si los dos primeros caracteres de `grupo` forman un diptongo.
-
-    Reglas consideradas:
-    - abierta + cerrada
-    - cerrada + abierta
-    - cerrada + cerrada
-
-    Asume que `grupo` tiene al menos 2 caracteres.
-    Devuelve True o False.
-    """
+def es_diptongo(grupo):
     if grupo[0] in VOCALES_ABIERTAS and grupo[1] in VOCALES_CERRADAS:
         return True
     elif grupo[0] in VOCALES_CERRADAS and grupo[1] in VOCALES_ABIERTAS:
         return True
     elif grupo[0] in VOCALES_CERRADAS and grupo[1] in VOCALES_CERRADAS:
         return True
-    return False
 
-def es_triptongo(grupo: str) -> bool:
-    """
-    Comprueba si los tres primeros caracteres de `grupo` forman un triptongo.
-
-    Patrón: cerrada, abierta, cerrada.
-    Asume que `grupo` tiene al menos 3 caracteres.
-    """
+def es_triptongo(grupo):
     return grupo[0] in VOCALES_CERRADAS and grupo[1] in VOCALES_ABIERTAS and grupo[2] in VOCALES_CERRADAS
 
-def es_grupo_vocalico_ok(grupo: str, caracter: str) -> bool:
-    """
-    Decide si `caracter` puede añadirse al `grupo` vocálico actual.
-
-    - Si `grupo` está vacío, devuelve True (se puede iniciar un grupo).
-    - Si la concatenación `grupo + caracter` forma un diptongo o triptongo, devuelve True.
-    - En cualquier otro caso devuelve False.
-
-    Asume que `grupo` y `caracter` contienen vocales.
-    """
+def es_grupo_vocalico_ok(grupo, caracter):
     # Asumimos que tanto grupo como caracter solo pueden estar formados por vocales y que caracter siempre va informado (con una vocal)
     if grupo == "": 
         return True
@@ -63,13 +44,7 @@ def es_grupo_vocalico_ok(grupo: str, caracter: str) -> bool:
     return False
 
 
-def obtener_grupos_vocalicos(palabra: str) -> list:
-    """
-    Extrae y devuelve una lista con los grupos vocálicos de `palabra`.
-
-    Cada elemento de la lista es una cadena con una secuencia válida de vocales
-    (vocal simple, diptongo o triptongo) encontrada en la palabra, en orden.
-    """
+def obtener_grupos_vocalicos(palabra):
     grupos_vocalicos = []
     grupo = ""
     for caracter in palabra:
@@ -86,29 +61,16 @@ def obtener_grupos_vocalicos(palabra: str) -> list:
     if grupo:
         grupos_vocalicos.append(grupo)
 
+    
     return grupos_vocalicos
 
-def es_grupo_consonantico(anterior: str, caracter: str) -> str:
-    """
-    Devuelve la cadena resultante al combinar `anterior` y `caracter` si forman
-    un par consonántico permitido; en caso contrario devuelve solo `caracter`.
-
-    Se usa para construir grupos consonánticos compuestos (por ejemplo 'br', 'pl').
-    """
+def es_grupo_consonantico(anterior, caracter):
     if anterior + caracter in PARES_CONSONANTES:
         return anterior + caracter
     else:
         return caracter
 
-def add_grupo_consonantes_delante(grupos_vocalicos: list, palabra: str) -> list:
-    """Distribuye las consonantes que preceden a cada grupo vocálico.
-
-    Toma la lista `grupos_vocalicos` (como la devuelta por `obtener_grupos_vocalicos`)
-    y recorre `palabra` para asociar las consonantes anteriores a cada grupo, devolviendo
-    una lista de protosílabas (consonantes + grupo vocálico) en el mismo orden.
-
-    No modifica la lista original (trabaja con una copia).
-    """
+def add_grupo_consonantes_delante(grupos_vocalicos, palabra):
     ix_grupo_vocalico = 0
     grupos_protosilabas = grupos_vocalicos[:] #para no modificar el original, buena practica
     consonante_anterior = ""
@@ -126,14 +88,7 @@ def add_grupo_consonantes_delante(grupos_vocalicos: list, palabra: str) -> list:
     return grupos_protosilabas
     
 
-
-def completar(grupos_protosilabicos: list, palabra: str) -> None:
-    """
-    Rellena las protosílabas incompletas recorriendo la palabra.
-
-    Modifica la lista `grupos_protosilabicos` en sitio añadiendo caracteres
-    que faltan según la posición en `palabra`. No devuelve nada.
-    """
+def completar(grupos_protosilabicos, palabra):
     ix_grupo = 0
     ix_dentro_grupo = 0
 
@@ -151,56 +106,151 @@ def completar(grupos_protosilabicos: list, palabra: str) -> None:
                 grupos_protosilabicos[ix_grupo] += caracter
 
 
-def silabear(palabra: str) -> list:
-    """
-    Divide `palabra` en protosílabas siguiendo el algoritmo:
 
-    1. Extrae grupos vocálicos válidos con `obtener_grupos_vocalicos`.
-    2. Asocia las consonantes anteriores a cada grupo con `add_grupo_consonantes_delante`.
-    3. Completa las protosílabas con `completar`.
-
-    Devuelve la lista final de protosílabas/sílabas.
-    """
+def silabear(palabra):
     grupos_vocalicos = obtener_grupos_vocalicos(palabra)
     grupos_protosilabicos = add_grupo_consonantes_delante(grupos_vocalicos, palabra)
     completar(grupos_protosilabicos, palabra)
     return grupos_protosilabicos
 
-
-
-
-
-
-def normal_a_pi(palabra: str) -> str:
-    """
-    Convierte `palabra` al dialecto 'pi' prefijando 'pi' a cada sílaba.
-
-    Usa `silabear` para obtener las sílabas y concatena 'pi' + sílaba para cada una.
-    Devuelve la palabra transformada.
-    """
+def normal_a_pi(palabra):
+    if palabra == "":
+        return ""
     silabas = silabear(palabra)
-    piSilabas = []
-    
+    resultado = ""
     for silaba in silabas:
-        piSilabas.append("pi" + silaba)
-    pipalabra = "".join(piSilabas)
-    return pipalabra     
+        resultado += "pi" + silaba
+    return resultado
 
-    
-"""
 def pi_a_normal(palabra):
-    silabasNormal= []
-    ix_pi = 0
-    silaba_anterior =    
-    for i in silabear(palabra)[1]:
-        
-    palabraNormal = "".join(silabasNormal)        
+    resultado = ""
+    pi_en_construccion = ES_PI.NO_HAY_PI
+    for caracter in palabra:
+        if caracter == "p" and pi_en_construccion == ES_PI.NO_HAY_PI:
+            pi_en_construccion = ES_PI.SOLO_P
+            continue
+
+        if caracter == "i" and pi_en_construccion == ES_PI.SOLO_P:
+            pi_en_construccion = ES_PI.YA_HAY_PI
+            continue
+
+        pi_en_construccion = ES_PI.NO_HAY_PI
+        resultado += caracter
+
+    return resultado
+
+def tokenizar(frase: str) -> list[str]:
+    """
+    Divide una frase en tokens según las reglas del modelo:
+    - Letras válidas: las definidas en las constantes del sistema.
+    - También se aceptan números.
+    - Espacios y signos de puntuación se devuelven como tokens independientes.
+    """
+    if not frase:
+        return []
+
+    LETRAS_VALIDAS = set(
+        sum([list(CONSONANTES), list(VOCALES_ABIERTAS), list(VOCALES_CERRADAS), list(SEMIVOCALES)], [])
+    )
+
+    tokens = []
+    token_actual = ""
+    tipo_actual = None  # Será un valor de TipoCaracter
+
+    def tipo_de_caracter(c):
+        if c.lower() in LETRAS_VALIDAS:
+            return TipoCaracter.LETRA
+        elif c.isspace():
+            return TipoCaracter.ESPACIO
+        else:
+            return TipoCaracter.OTRO
+
+    for caracter in frase:
+        tipo = tipo_de_caracter(caracter)
+
+        if tipo_actual is None:
+            token_actual = caracter
+            tipo_actual = tipo
+        elif tipo == tipo_actual:
+            token_actual += caracter
+        else:
+            tokens.append(token_actual)
+            token_actual = caracter
+            tipo_actual = tipo
+
+    if token_actual:
+        tokens.append(token_actual)
+
+    return tokens
+
+def es_token_procesable(token):
+    """
+    Devuelve True si el token está formado solo por letras válidas o números,
+    según las constantes definidas en el sistema (CONSONANTES, VOCALES, SEMIVOCALES).
+    """
+    if not token:
+        return False
+
+    letras_validas = set(
+        sum([list(CONSONANTES), list(VOCALES_ABIERTAS), list(VOCALES_CERRADAS), list(SEMIVOCALES)], [])
+    )
+
+    for c in token.lower():
+        if c not in letras_validas:
+            return False
+
+    return True
 
 
-   
+def procesar_tokens(tokens, funcion_transformacion):
+    """
+    Recorre los tokens y aplica la función indicada (normal_a_pi o pi_a_normal)
+    solo a aquellos que sean procesables (palabras o alfanuméricos).
+    El resto de tokens se dejan sin modificar.
+    """
+    if not tokens:
+        return []
 
-    return palabraNormal
-"""
-    
-if __name__ == "__main__":
-    print(pi_a_normal("pihopila"))
+    resultado = []
+    for token in tokens:
+        if es_token_procesable(token):
+            resultado.append(funcion_transformacion(token))
+        else:
+            resultado.append(token)
+
+    return resultado
+
+def reconstruir_frase(tokens):
+    """
+    Toma una lista de tokens y devuelve una cadena con todos ellos concatenados
+    en el mismo orden. No altera los tokens ni introduce separadores.
+    """
+    if not tokens:
+        return ""
+
+    return "".join(tokens)
+
+def frase_a_pi(frase):
+    """
+    Convierte una frase completa al lenguaje pi usando el pipeline:
+    tokenizar -> procesar_tokens(normal_a_pi) -> reconstruir_frase
+    """
+    if not frase:
+        return ""
+
+    tokens = tokenizar(frase)
+    tokens_procesados = procesar_tokens(tokens, normal_a_pi)
+    return reconstruir_frase(tokens_procesados)
+
+
+def pi_a_frase(frase):
+    """
+    Convierte una frase completa del lenguaje pi al español normal usando el pipeline:
+    tokenizar -> procesar_tokens(pi_a_normal) -> reconstruir_frase
+    """
+    if not frase:
+        return ""
+
+    tokens = tokenizar(frase)
+    tokens_procesados = procesar_tokens(tokens, pi_a_normal)
+    return reconstruir_frase(tokens_procesados)
